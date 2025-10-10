@@ -16,8 +16,37 @@ const ContactUs = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert('Thank you for your inquiry! We will respond within 48 hours.');
+
+    // Pre-required message template for clarity and professionalism
+    const preRequiredTemplate = `*New Website Inquiry*%0A` +
+      `Dear Ravindra Kumar Team,%0A` +
+      `A new contact form submission has been received. Please review the details below:%0A` +
+      `----------------------------------------%0A`;
+
+    // User-submitted data with clean formatting
+    const userData = `*Name*: ${formData.name}%0A` +
+      `*Email*: ${formData.email}%0A` +
+      `*Subject*: ${formData.subject}%0A` +
+      `*Message*: ${formData.message}%0A` +
+      `----------------------------------------%0A` +
+      `Thank you for your attention!`;
+
+    // Combine template and user data
+    const fullMessage = preRequiredTemplate + userData;
+
+    // WhatsApp number
+    const whatsappNumber = '+919060804572';
+
+    // WhatsApp API URL with encoded message
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(fullMessage)}`;
+
+    // Open WhatsApp in a new tab
+    window.open(whatsappUrl, '_blank');
+
+    // Confirmation alert
+    alert('Your inquiry has been opened in WhatsApp with a pre-filled message. Please hit "Send" to complete submission. We will respond within 48 hours.');
+
+    // Reset form
     setFormData({ name: '', email: '', subject: '', message: '' });
   };
 
