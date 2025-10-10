@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import logo from '../assets/logo.png'; // Ensure the logo path is correct
 
 const Header = () => {
@@ -13,83 +14,96 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const closeMenu = () => setIsOpen(false);
 
+  // Animation variants for nav items
+  const navItemVariants = {
+    hover: { scale: 1.1, y: -2, transition: { duration: 0.3 } },
+    tap: { scale: 0.95, transition: { duration: 0.2 } },
+  };
+
+  // Animation for mobile menu
+  const mobileMenuVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, ease: 'easeOut', staggerChildren: 0.1 },
+    },
+  };
+
+  const mobileItemVariants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: { opacity: 1, x: 0 },
+  };
+
   return (
-    <header className="sticky top-0 w-full z-50 bg-gradient-to-r from-teal-700/95 to-blue-600/95 backdrop-blur-md transition-all duration-500 ease-in-out shadow-lg hover:shadow-2xl">
+    <motion.header
+      className="sticky top-0 w-full z-50 bg-gradient-to-r from-teal-800/95 to-blue-700/95 backdrop-blur-lg shadow-lg hover:shadow-xl transition-all duration-500 ease-in-out"
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.6, ease: 'easeOut' }}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 md:h-20">
           {/* Logo/Brand (Left Section) */}
-          <div className="flex items-center space-x-4">
+          <motion.div
+            className="flex items-center space-x-4"
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.3 }}
+          >
             <Link to="/" onClick={closeMenu}>
               <img
                 src={logo}
                 alt="RAVINDRA KUMAR Logo"
-                className="h-12 w-auto transition-all duration-300 ease-in-out hover:scale-110 hover:brightness-110 animate-pulse-slow"
+                className="h-12 w-auto transition-all duration-300 ease-in-out hover:brightness-110"
               />
             </Link>
-            <span className="hidden md:inline text-2xl font-serif font-extrabold text-white tracking-tight transition-transform duration-300 hover:scale-105">
+            <span className="hidden md:inline text-2xl font-serif font-extrabold text-white tracking-tight">
               RAVINDRA KUMAR
             </span>
-          </div>
+          </motion.div>
 
-          {/* Desktop Navigation (Center Section) */}
-          <nav className="hidden md:flex space-x-12 items-center font-medium">
+          {/* Desktop Navigation (Centered) */}
+          <nav className="hidden md:flex flex-1 justify-center items-center space-x-8 lg:space-x-12 font-medium">
             {navItems.map((item) => (
               <NavLink
                 key={item.name}
                 to={item.path}
                 className={({ isActive }) =>
-                  `relative group text-lg tracking-wide transition-all duration-300 ease-in-out 
+                  `relative group text-base lg:text-lg tracking-wide transition-colors duration-300 ease-in-out 
                   ${
                     isActive
-                      ? 'text-teal-300 font-semibold'
-                      : 'text-white hover:text-teal-300'
+                      ? 'text-emerald-300 font-semibold'
+                      : 'text-white hover:text-emerald-300'
                   }`
                 }
               >
                 {({ isActive }) => (
-                  <>
+                  <motion.span
+                    variants={navItemVariants}
+                    whileHover="hover"
+                    whileTap="tap"
+                  >
                     {item.name}
                     <span
-                      className={`absolute -bottom-1 left-0 h-0.5 bg-teal-300 transform transition-all duration-300 ease-in-out
+                      className={`absolute -bottom-1 left-0 h-0.5 bg-emerald-300 transform transition-all duration-300 ease-in-out
                         ${isActive ? 'w-full scale-x-100' : 'w-0 group-hover:w-full group-hover:scale-x-100'}`}
                       aria-hidden="true"
                     ></span>
-                  </>
+                  </motion.span>
                 )}
               </NavLink>
             ))}
           </nav>
 
-          {/* Utility/Search Icon (Right Section) */}
-          <div className="hidden md:flex items-center space-x-4">
-            <button
-              className="p-2 rounded-full text-white transition-all duration-300 ease-in-out hover:text-teal-300 hover:bg-teal-600/20 hover:scale-110 focus:outline-none"
-              aria-label="Search"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-            </button>
-          </div>
-
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center">
-            <button
+            <motion.button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-white p-2 rounded-lg hover:bg-teal-600/20 transition-all duration-200 hover:scale-105 focus:outline-none"
+              className="text-white p-2 rounded-lg hover:bg-emerald-600/30 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               aria-label="Toggle menu"
               aria-expanded={isOpen}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
             >
               {isOpen ? (
                 <svg
@@ -122,14 +136,19 @@ const Header = () => {
                   />
                 </svg>
               )}
-            </button>
+            </motion.button>
           </div>
         </div>
       </div>
 
       {/* Mobile Menu Dropdown */}
       {isOpen && (
-        <div className="md:hidden absolute top-16 md:top-20 left-0 w-full bg-gradient-to-br from-teal-700/95 to-blue-600/95 backdrop-blur-md shadow-2xl border-t border-teal-300/50 transition-all duration-500 ease-in-out animate-slide-down">
+        <motion.div
+          className="md:hidden absolute top-16 left-0 w-full bg-gradient-to-br from-teal-800/95 to-blue-700/95 backdrop-blur-lg shadow-2xl border-t border-emerald-300/50"
+          variants={mobileMenuVariants}
+          initial="hidden"
+          animate="visible"
+        >
           <div className="flex flex-col items-start py-4">
             {navItems.map((item) => (
               <NavLink
@@ -140,18 +159,20 @@ const Header = () => {
                   `text-white font-medium text-lg w-full px-6 py-3 transition-all duration-200 ease-in-out border-l-4
                   ${
                     isActive
-                      ? 'text-teal-300 font-semibold bg-teal-800/30 border-teal-300'
-                      : 'hover:bg-teal-800/30 border-transparent hover:border-teal-300 hover:translate-x-1'
+                      ? 'text-emerald-300 font-semibold bg-emerald-800/30 border-emerald-300'
+                      : 'hover:bg-emerald-800/30 border-transparent hover:border-emerald-300 hover:text-emerald-300'
                   }`
                 }
               >
-                {item.name}
+                <motion.span variants={mobileItemVariants}>
+                  {item.name}
+                </motion.span>
               </NavLink>
             ))}
           </div>
-        </div>
+        </motion.div>
       )}
-    </header>
+    </motion.header>
   );
 };
 
