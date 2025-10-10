@@ -43,7 +43,7 @@ const AboutUs = () => {
             className="inline-block px-8 py-4 rounded-full font-semibold text-white bg-teal-500 hover:bg-teal-600 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 uppercase tracking-wider"
             aria-label="Explore Our Product Catalog"
           >
-            Explore Our Catalog
+            Explore Our Products
           </Link>
         </div>
 
