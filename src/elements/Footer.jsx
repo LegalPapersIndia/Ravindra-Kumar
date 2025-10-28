@@ -142,7 +142,7 @@ const Footer = () => {
 
       {/* Bottom Footer */}
       <div className="pt-2 text-center text-sm text-gray-400 tracking-wide transition-opacity duration-500 hover:opacity-90">
-        &copy; {new Date().getFullYear()} <a href="https://www.legalpapersindia.com/">Legal Papers India</a>. All rights reserved.
+        &copy; {new Date().getFullYear()} <a href="https://www.legalpapersindia.com/" target='_blank'>Legal Papers India</a>. All rights reserved.
       </div>
     </footer>
   );
